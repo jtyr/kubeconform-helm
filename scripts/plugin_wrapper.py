@@ -11,7 +11,7 @@ from glob import glob
 
 
 def parse_args(add_chart=True, add_files=False, add_path=False, add_incl_excl=False):
-    # Command line options for helm, kubeconform and the plugin itself
+    # Test Command line options for helm, kubeconform and the plugin itself
     args = {
         "helm_tmpl": [],
         "helm_build": [],
