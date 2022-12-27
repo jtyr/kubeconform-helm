@@ -1,0 +1,17 @@
+name: On PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v2.0.3

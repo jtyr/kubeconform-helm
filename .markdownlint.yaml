@@ -1,0 +1,57 @@
+# Default state for all rules
+default: true
+
+# Path to configuration file to extend
+extends:
+
+# MD002/first-heading-h1/first-header-h1 - First heading should be a top-level heading
+MD002: false
+
+# MD003/heading-style/header-style - Heading style
+MD003:
+  style: atx
+
+# MD004/ul-style - Unordered list style
+MD004:
+  style: dash
+
+# MD013/line-length - Line length
+MD013:
+  # Number of characters
+  line_length: 120
+  # Number of characters for headings
+  heading_line_length: 120
+  # Exclude code blocks
+  code_blocks: false
+  # Exclude tables
+  tables: false
+
+# MD024/headings/headers - Multiple headings with the same content
+MD024:
+  # Heading duplication is allowed for non-sibling headings
+  siblings_only: true
+
+# MD035/hr-style - Horizontal rule style
+MD035:
+  # Horizontal rule style
+  style: '---'
+
+# MD046/code-block-style - Code block style
+MD046:
+  # Block style
+  style: fenced
+
+# MD048/code-fence-style - Code fence style
+MD048:
+  # Code fence style
+  style: backtick
+
+# MD049/emphasis-style - Emphasis style
+MD049:
+  # Emphasis style
+  style: underscore
+
+# MD050/strong-style - Strong style
+MD050:
+  # Strong style
+  style: asterisk
