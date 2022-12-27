@@ -1,0 +1,45 @@
+name: On PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - LICENSE
+      - README.md
+      - .flake8
+      - .github/**
+      - .gitignore
+      - .markdownlint.yaml
+      - .pre-commit-config.yaml
+      - .shellcheckrc
+
+jobs:
+  lint:
+    name: Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get versions
+        id: get
+        run: |
+          echo "last_tag=$(git tag --sort=creatordate --sort=v:refname | tail -n1)" >> $GITHUB_OUTPUT
+          echo "plugin_version=$(grep -Po '(?<=version:\ ).*' plugin.yaml)" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        uses: madhead/semver-utils@1.0.0
+        id: version
+        with:
+          version: ${{ steps.get.outputs.last_tag }}
+          compare-to: ${{ steps.get.outputs.plugin_version }}
+
+      - name: Check if the plugin.yaml version was updated
+        run: |-
+          if [[ '${{ steps.version.outputs.comparison-result }}' != '<' ]]; then
+            echo '::error::Version in the file plugin.yaml was not updated!'
+            exit 1
+          fi
