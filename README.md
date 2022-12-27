@@ -56,7 +56,7 @@ verbose: true
 ```
 
 The full list of options for the
-[plugin](https://github.com/yannh/kubeconform/blob/master/scripts/helm/plugin_wrapper.py)
+[plugin](https://github.com/yannh/kubeconform/blob/master/scripts/plugin_wrapper.py)
 is as follows:
 
 ```text
@@ -163,7 +163,7 @@ that can be specified:
 ```
 
 The full list of options for the
-[hook](https://github.com/yannh/kubeconform/blob/master/scripts/helm/pre-commit.py)
+[hook](https://github.com/yannh/kubeconform/blob/master/scripts/pre-commit.py)
 is as follows:
 
 ```text

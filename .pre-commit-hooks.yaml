@@ -2,6 +2,6 @@
   name: Kubeconform Helm
   description: Run kubeconform for Helm charts
   language: script
-  entry: scripts/helm/pre-commit.py
+  entry: scripts/pre-commit.py
   files: ^(helper-|)charts/[^/]+/(\.kubeconform|\.helmignore|templates/NOTES.txt|.*\.(ya?ml|json|tpl))$
   require_serial: true
