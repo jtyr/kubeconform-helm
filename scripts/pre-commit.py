@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 import os
 import sys
 
@@ -27,6 +28,7 @@ def main():
         add_files=True,
         add_path=True,
         add_incl_excl=True,
+        add_path_sub=True,
     )
 
     # We gonna change directory into the chart directory so we add it as local
@@ -61,6 +63,16 @@ def main():
 
     for f in args["wrapper"].FILES:
         if f.startswith("%s%s" % (args["wrapper"].charts_path, os.sep)):
+            # Path substitution if any is defined
+            if (
+                args["wrapper"].path_sub_pattern is not None
+                and "," in args["wrapper"].path_sub_pattern
+            ):
+                pattern, repl = args["wrapper"].path_sub_pattern.split(
+                    args["wrapper"].path_sub_separator, 1
+                )
+                f = re.sub(pattern, repl, f)
+
             items = f.split(os.sep)
             name = items[path_items_len - 1]
 
