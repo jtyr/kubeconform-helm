@@ -60,7 +60,7 @@ The full list of options for the
 is as follows:
 
 ```text
-$ ./plugin_wrapper.py --help
+$ ./scripts/plugin_wrapper.py --help
 usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE] [--values-dir DIR]
                          [--values-pattern PATTERN] [--debug] [--skip-refresh] [--verify]
                          [-f FILE] [-n NAME] [-r NAME] [--ignore-missing-schemas]
@@ -167,9 +167,10 @@ The full list of options for the
 is as follows:
 
 ```text
-$ ./pre-commit.py --help
+$ ./scripts/pre-commit.py --help
 usage: pre-commit.py [-h] [--charts-path PATH] [--include-charts LIST]
-                     [--exclude-charts LIST] [--cache] [--cache-dir DIR] [--config FILE]
+                     [--exclude-charts LIST] [--path-sub-pattern PATTERN]
+                     [--path-sub-separator SEP] [--cache] [--cache-dir DIR] [--config FILE]
                      [--values-dir DIR] [--values-pattern PATTERN] [--debug]
                      [--skip-refresh] [--verify] [-f FILE] [-n NAME] [-r NAME]
                      [--ignore-missing-schemas] [--insecure-skip-tls-verify]
@@ -191,6 +192,11 @@ options:
                         comma-separated list of chart names to include in the testing
   --exclude-charts LIST
                         comma-separated list of chart names to exclude from the testing
+  --path-sub-pattern PATTERN
+                        substitution pattern to rewrite chart directory path for library
+                        charts (e.g. '^charts/(commonlib),helper-charts/\1-test')
+  --path-sub-separator SEP
+                        separator used to split the path-sub-pattern (default: ,)
   --cache               whether to use kubeconform cache
   --cache-dir DIR       path to the cache directory (default: ~/.cache/kubeconform)
   --config FILE         config file name (default: .kubeconform)

@@ -10,7 +10,13 @@ import yaml
 from glob import glob
 
 
-def parse_args(add_chart=True, add_files=False, add_path=False, add_incl_excl=False):
+def parse_args(
+    add_chart=True,
+    add_files=False,
+    add_path=False,
+    add_incl_excl=False,
+    add_path_sub=False,
+):
     # Command line options for helm, kubeconform and the plugin itself
     args = {
         "helm_tmpl": [],
@@ -44,6 +50,19 @@ def parse_args(add_chart=True, add_files=False, add_path=False, add_incl_excl=Fa
             help="comma-separated list of chart names to exclude from the testing",
         )
 
+    if add_path_sub:
+        parser.add_argument(
+            "--path-sub-pattern",
+            metavar="PATTERN",
+            help="substitution pattern to rewrite chart directory path for library charts (e.g. '^charts/(commonlib),helper-charts/\\1-test')",
+        )
+        parser.add_argument(
+            "--path-sub-separator",
+            metavar="SEP",
+            help="separator used to split the path-sub-pattern (default: ,)",
+            default=",",
+        )
+
     parser.add_argument(
         "--cache", help="whether to use kubeconform cache", action="store_true"
     )
@@ -71,7 +90,6 @@ def parse_args(add_chart=True, add_files=False, add_path=False, add_incl_excl=Fa
         help="pattern to select the values files (default: *-values.yaml)",
         default="*-values.yaml",
     )
-
     parser.add_argument(
         "--debug",
         help="debug output",
