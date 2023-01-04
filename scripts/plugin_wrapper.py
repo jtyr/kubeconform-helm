@@ -10,6 +10,10 @@ import yaml
 from glob import glob
 
 
+# Name of the Helm plugin
+PLUGIN_NAME = "kubeconform-helm"
+
+
 def parse_args(
     add_chart=True,
     add_files=False,
@@ -453,11 +457,11 @@ def run_kubeconform(args, input):
 
         if not helm_error:
             for line in result.stdout.split("\n"):
-                if line.startswith("HELM_PLUGINS") and "=" in line:
+                if line.startswith("HELM_PLUGINS="):
                     _, plugins_path = line.split("=")
 
                     helm_plugin_bin = os.path.join(
-                        plugins_path.strip('"'), bin_file, "bin", bin_file
+                        plugins_path.strip('"'), PLUGIN_NAME, "bin", bin_file
                     )
 
                     if os.path.isfile(helm_plugin_bin):
