@@ -103,6 +103,11 @@ def parse_args(
         action="store_true",
     )
     parser.add_argument(
+        "--stdout",
+        help="log to stdout",
+        action="store_true",
+    )
+    parser.add_argument(
         "--fail-fast",
         help="fail on first error",
         action="store_true",
@@ -297,15 +302,20 @@ def parse_args(
     return args
 
 
-def get_logger(debug):
+def get_logger(debug, stdout):
     if debug:
         level = logging.DEBUG
     else:
         level = logging.ERROR
 
+    if stdout:
+        stream = sys.stdout
+    else:
+        stream = sys.stderr
+
     format = "%(levelname)s: %(message)s"
 
-    logging.basicConfig(level=level, format=format)
+    logging.basicConfig(level=level, format=format, stream=stream)
 
     return logging.getLogger(__name__)
 
@@ -558,7 +568,7 @@ def main():
     args = parse_args()
 
     # Ger logger
-    log = get_logger(args["wrapper"].debug)
+    log = get_logger(args["wrapper"].debug, args["wrapper"].stdout)
 
     # Parse config file
     config_args = parse_config(

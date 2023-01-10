@@ -61,13 +61,14 @@ is as follows:
 
 ```text
 $ ./scripts/plugin_wrapper.py --help
-usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE] [--values-dir DIR]
-                         [--values-pattern PATTERN] [--debug] [--skip-refresh] [--verify]
-                         [-f FILE] [-n NAME] [-r NAME] [--ignore-missing-schemas]
-                         [--insecure-skip-tls-verify] [--kubernetes-version VERSION]
-                         [--goroutines NUMBER] [--output {json,junit,tap,text}]
-                         [--reject LIST] [--schema-location LOCATION] [--skip LIST]
-                         [--strict] [--summary] [--verbose]
+usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE]
+                         [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
+                         [--fail-fast] [--skip-refresh] [--verify] [-f FILE] [-n NAME]
+                         [-r NAME] [--ignore-missing-schemas] [--insecure-skip-tls-verify]
+                         [--kubernetes-version VERSION] [--goroutines NUMBER]
+                         [--output {json,junit,tap,text}] [--reject LIST]
+                         [--schema-location LOCATION] [--skip LIST] [--strict] [--summary]
+                         [--verbose]
                          CHART
 
 Wrapper to run kubeconform for a Helm chart.
@@ -80,7 +81,9 @@ options:
   --values-dir DIR      directory with optional values files for the tests (default: ci)
   --values-pattern PATTERN
                         pattern to select the values files (default: *-values.yaml)
-  --debug               debug output
+  -d                    debug output
+  --stdout              log to stdout
+  --fail-fast           fail on first error
 
 helm build:
   Options passed to the 'helm build' command
@@ -171,9 +174,9 @@ $ ./scripts/pre-commit.py --help
 usage: pre-commit.py [-h] [--charts-path PATH] [--include-charts LIST]
                      [--exclude-charts LIST] [--path-sub-pattern PATTERN]
                      [--path-sub-separator SEP] [--cache] [--cache-dir DIR] [--config FILE]
-                     [--values-dir DIR] [--values-pattern PATTERN] [--debug]
-                     [--skip-refresh] [--verify] [-f FILE] [-n NAME] [-r NAME]
-                     [--ignore-missing-schemas] [--insecure-skip-tls-verify]
+                     [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
+                     [--fail-fast] [--skip-refresh] [--verify] [-f FILE] [-n NAME]
+                     [-r NAME] [--ignore-missing-schemas] [--insecure-skip-tls-verify]
                      [--kubernetes-version VERSION] [--goroutines NUMBER]
                      [--output {json,junit,tap,text}] [--reject LIST]
                      [--schema-location LOCATION] [--skip LIST] [--strict] [--summary]
@@ -203,7 +206,9 @@ options:
   --values-dir DIR      directory with optional values files for the tests (default: ci)
   --values-pattern PATTERN
                         pattern to select the values files (default: *-values.yaml)
-  --debug               debug output
+  -d                    debug output
+  --stdout              log to stdout
+  --fail-fast           fail on first error
 
 helm build:
   Options passed to the 'helm build' command
