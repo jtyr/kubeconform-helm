@@ -68,7 +68,9 @@ def parse_args(
         )
 
     parser.add_argument(
-        "--cache", help="whether to use kubeconform cache", action="store_true"
+        "--cache",
+        help="whether to use kubeconform cache",
+        action="store_true",
     )
     parser.add_argument(
         "--cache-dir",
@@ -95,13 +97,20 @@ def parse_args(
         default="*-values.yaml",
     )
     parser.add_argument(
-        "--debug",
+        "-d",
+        dest="debug",
         help="debug output",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--fail-fast",
+        help="fail on first error",
         action="store_true",
     )
 
     group_helm_build = parser.add_argument_group(
-        "helm build", "Options passed to the 'helm build' command"
+        "helm build",
+        "Options passed to the 'helm build' command",
     )
 
     group_helm_build.add_argument(
@@ -110,11 +119,14 @@ def parse_args(
         action="store_true",
     )
     group_helm_build.add_argument(
-        "--verify", help="verify the packages against signatures", action="store_true"
+        "--verify",
+        help="verify the packages against signatures",
+        action="store_true",
     )
 
     group_helm_tmpl = parser.add_argument_group(
-        "helm template", "Options passed to the 'helm template' command"
+        "helm template",
+        "Options passed to the 'helm template' command",
     )
 
     group_helm_tmpl.add_argument(
@@ -144,7 +156,8 @@ def parse_args(
         )
 
     group_kubeconform = parser.add_argument_group(
-        "kubeconform", "Options passsed to the 'kubeconform' command"
+        "kubeconform",
+        "Options passsed to the 'kubeconform' command",
     )
 
     group_kubeconform.add_argument(
@@ -486,15 +499,15 @@ def run_kubeconform(args, input):
         + args,
         input=input,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         text=True,
     )
 
     # Check for errors
     if result.returncode != 0:
         raise Exception(
-            "failed to run kubeconform: rc=%d\n%s%s"
-            % (result.returncode, result.stderr, result.stdout)
+            "failed to run kubeconform: rc=%d\n%s"
+            % (result.returncode, result.stdout.rstrip())
         )
 
     return result
@@ -563,21 +576,39 @@ def main():
         args["helm_tmpl"][-1],
     )
 
+    # Return value
+    ret = 0
+
     # Run tests
-    try:
-        if values_files:
-            for values_file in values_files:
-                log.debug("Testing with CI values file %s" % values_file)
+    if values_files:
+        for values_file in values_files:
+            log.info("Testing with CI values file %s" % values_file)
 
+            try:
                 run_test(args, values_file)
-        else:
-            log.debug("Testing without CI values files")
+            except Exception as e:
+                log.error("Testing failed: %s" % e)
 
+                ret = 1
+
+                # Fail on first error
+                if args["wrapper"].fail_fast:
+                    sys.exit(ret)
+    else:
+        log.debug("Testing without CI values files")
+
+        try:
             run_test(args)
-    except Exception as e:
-        log.error("Testing failed: %s" % e)
+        except Exception as e:
+            log.error("Testing failed: %s" % e)
 
-        sys.exit(1)
+            ret = 1
+
+            # Fail on first error
+            if args["wrapper"].fail_fast:
+                sys.exit(ret)
+
+    sys.exit(ret)
 
 
 if __name__ == "__main__":
