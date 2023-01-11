@@ -13,7 +13,7 @@ The `kubeconform` [Helm plugin](https://helm.sh/docs/topics/plugins/) can be
 installed using this command:
 
 ```shell
-helm plugin install https://github.com/yannh/kubeconform
+helm plugin install https://github.com/jtyr/kubeconform-helm
 ```
 
 Once installed, the plugin can be used from any Helm chart directory:
