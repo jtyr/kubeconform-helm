@@ -63,12 +63,12 @@ is as follows:
 $ ./scripts/plugin_wrapper.py --help
 usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE]
                          [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
-                         [--fail-fast] [--skip-refresh] [--verify] [-f FILE] [-n NAME]
-                         [-r NAME] [--ignore-missing-schemas] [--insecure-skip-tls-verify]
-                         [--kubernetes-version VERSION] [--goroutines NUMBER]
-                         [--output {json,junit,tap,text}] [--reject LIST]
-                         [--schema-location LOCATION] [--skip LIST] [--strict] [--summary]
-                         [--verbose]
+                         [--errors-only] [--fail-fast] [--skip-refresh] [--verify]
+                         [-f FILE] [-n NAME] [-r NAME] [--ignore-missing-schemas]
+                         [--insecure-skip-tls-verify] [--kubernetes-version VERSION]
+                         [--goroutines NUMBER] [--output {json,junit,tap,text}]
+                         [--reject LIST] [--schema-location LOCATION] [--skip LIST]
+                         [--strict] [--summary] [--verbose]
                          CHART
 
 Wrapper to run kubeconform for a Helm chart.
@@ -83,6 +83,7 @@ options:
                         pattern to select the values files (default: *-values.yaml)
   -d                    debug output
   --stdout              log to stdout
+  --errors-only         output only errors
   --fail-fast           fail on first error
 
 helm build:
@@ -175,10 +176,10 @@ usage: pre-commit.py [-h] [--charts-path PATH] [--include-charts LIST]
                      [--exclude-charts LIST] [--path-sub-pattern PATTERN]
                      [--path-sub-separator SEP] [--cache] [--cache-dir DIR] [--config FILE]
                      [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
-                     [--fail-fast] [--skip-refresh] [--verify] [-f FILE] [-n NAME]
-                     [-r NAME] [--ignore-missing-schemas] [--insecure-skip-tls-verify]
-                     [--kubernetes-version VERSION] [--goroutines NUMBER]
-                     [--output {json,junit,tap,text}] [--reject LIST]
+                     [--errors-only] [--fail-fast] [--skip-refresh] [--verify] [-f FILE]
+                     [-n NAME] [-r NAME] [--ignore-missing-schemas]
+                     [--insecure-skip-tls-verify] [--kubernetes-version VERSION]
+                     [--goroutines NUMBER] [--output {json,junit,tap,text}] [--reject LIST]
                      [--schema-location LOCATION] [--skip LIST] [--strict] [--summary]
                      [--verbose]
                      FILES [FILES ...]
@@ -208,6 +209,7 @@ options:
                         pattern to select the values files (default: *-values.yaml)
   -d                    debug output
   --stdout              log to stdout
+  --errors-only         output only errors
   --fail-fast           fail on first error
 
 helm build:
