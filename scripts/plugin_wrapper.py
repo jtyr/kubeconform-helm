@@ -108,6 +108,11 @@ def parse_args(
         action="store_true",
     )
     parser.add_argument(
+        "--errors-only",
+        help="output only errors",
+        action="store_true",
+    )
+    parser.add_argument(
         "--fail-fast",
         help="fail on first error",
         action="store_true",
@@ -559,7 +564,7 @@ def run_test(args, values_file=None):
         raise Exception("kubeconform failed: %s" % e)
 
     # Print results
-    if kubeconform_result.stdout:
+    if kubeconform_result.stdout and not args["wrapper"].errors_only:
         print(kubeconform_result.stdout.rstrip())
 
 
