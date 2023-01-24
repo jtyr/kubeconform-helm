@@ -307,7 +307,7 @@ def parse_args(
     return args
 
 
-def get_logger(debug, stdout):
+def get_logger(debug, stdout=False):
     if debug:
         level = logging.DEBUG
     else:
