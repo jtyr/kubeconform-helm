@@ -87,8 +87,8 @@ def parse_args(
     parser.add_argument(
         "--values-dir",
         metavar="DIR",
-        help="directory with optional values files for the tests (default: ci)",
-        default="ci",
+        help="directory with optional values files for the tests (default: tests/kubeconform)",
+        default="tests/kubeconform",
     )
     parser.add_argument(
         "--values-pattern",

@@ -78,7 +78,8 @@ options:
   --cache               whether to use kubeconform cache
   --cache-dir DIR       path to the cache directory (default: ~/.cache/kubeconform)
   --config FILE         config file name (default: .kubeconform)
-  --values-dir DIR      directory with optional values files for the tests (default: ci)
+  --values-dir DIR      directory with optional values files for the tests (default:
+                        tests/kubeconform)
   --values-pattern PATTERN
                         pattern to select the values files (default: *-values.yaml)
   -d                    debug output
@@ -204,7 +205,8 @@ options:
   --cache               whether to use kubeconform cache
   --cache-dir DIR       path to the cache directory (default: ~/.cache/kubeconform)
   --config FILE         config file name (default: .kubeconform)
-  --values-dir DIR      directory with optional values files for the tests (default: ci)
+  --values-dir DIR      directory with optional values files for the tests (default:
+                        tests/kubeconform)
   --values-pattern PATTERN
                         pattern to select the values files (default: *-values.yaml)
   -d                    debug output
