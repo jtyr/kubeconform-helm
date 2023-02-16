@@ -226,6 +226,12 @@ def parse_args(
         help="print results for all resources (ignored for tap and junit output)",
         action="store_true",
     )
+    group_kubeconform.add_argument(
+        "--report",
+        metavar="FILE",
+        help="config file name (default: .kubeconform)",
+        default="report.txt",
+    )
 
     if add_files:
         parser.add_argument(
@@ -300,6 +306,9 @@ def parse_args(
 
     if a.verbose is True:
         args["kubeconform"] += ["-verbose"]
+
+    if a.report:
+        args["kubeconform"] += ["-report", os.path.expanduser(a.report)]
 
     # ### All args are wrapper options
     args["wrapper"] = a
@@ -496,6 +505,13 @@ def run_kubeconform(args, input):
                         bin_file = helm_plugin_bin
 
     # Create the cache dir
+    if "-report" in args:
+        r_idx = args.index("-report")
+        args.pop(r_idx)
+        reportfile = args.pop(r_idx)
+    else:
+        reportfile = None
+
     if "-cache" in args:
         c_idx = args.index("-cache")
         c_dir = args[c_idx + 1]
@@ -513,10 +529,17 @@ def run_kubeconform(args, input):
         ]
         + args,
         input=input,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
         text=True,
+        capture_output=True
     )
+
+    # Report to separate file
+    if reportfile:
+        try:
+            with open(reportfile, "w") as f:
+                print(result.stdout, file=f)
+        except Exception as e:
+            raise Exception("can't write to file %s : %s" % reportfile, e)
 
     # Check for errors
     if result.returncode != 0:
