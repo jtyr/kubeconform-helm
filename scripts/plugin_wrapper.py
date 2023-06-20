@@ -346,9 +346,12 @@ def parse_config(filename):
     if isinstance(data, dict):
         for key, val in data.items():
             if isinstance(val, list):
-                for v in val:
-                    args.append("-%s=%s" % (key, v))
-            elif isinstance(v, dict):
+                if key == "skip":
+                    args.append("-%s=%s" % (key, ",".join(val)))
+                else:
+                    for v in val:
+                        args.append("-%s=%s" % (key, v))
+            elif isinstance(val, dict):
                 # No deep dicts allowed in the config
                 continue
             else:
