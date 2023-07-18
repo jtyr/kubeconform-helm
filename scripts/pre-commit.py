@@ -44,11 +44,8 @@ def main():
     # Here we store paths fo the changed charts
     charts = {}
 
-    # Calculate length of the path to the directory with charts
-    path_items = args["wrapper"].charts_path.split(os.sep)
-
-    # Take only paths pointing to files in the chart
-    path_items_len = len(path_items) + 1
+    # Calculate length of the path to the directories with charts
+    path_items_lens = [len(x.split(os.sep)) + 1 for x in args["wrapper"].charts_path]
 
     # Includes and excludes
     if args["wrapper"].include_charts is not None:
@@ -61,32 +58,33 @@ def main():
     else:
         exclude_charts = []
 
-    for f in args["wrapper"].FILES:
-        if f.startswith("%s%s" % (args["wrapper"].charts_path, os.sep)):
-            # Path substitution if any is defined
-            if (
-                args["wrapper"].path_sub_pattern is not None
-                and "," in args["wrapper"].path_sub_pattern
-            ):
-                pattern, repl = args["wrapper"].path_sub_pattern.split(
-                    args["wrapper"].path_sub_separator, 1
-                )
-                f = re.sub(pattern, repl, f)
+    for i, charts_path in enumerate(args["wrapper"].charts_path):
+        for f in args["wrapper"].FILES:
+            if f.startswith("%s%s" % (charts_path, os.sep)):
+                # Path substitution if any is defined
+                if (
+                    args["wrapper"].path_sub_pattern is not None
+                    and "," in args["wrapper"].path_sub_pattern
+                ):
+                    pattern, repl = args["wrapper"].path_sub_pattern.split(
+                        args["wrapper"].path_sub_separator, 1
+                    )
+                    f = re.sub(pattern, repl, f)
 
-            items = f.split(os.sep)
-            name = items[path_items_len - 1]
+                items = f.split(os.sep)
+                name = items[path_items_lens[i] - 1]
 
-            # Skip chart if it's not included or is excluded
-            if (
-                include_charts and name not in include_charts
-            ) or name in exclude_charts:
-                continue
+                # Skip chart if it's not included or is excluded
+                if (
+                    include_charts and name not in include_charts
+                ) or name in exclude_charts:
+                    continue
 
-            if len(items) > path_items_len:
-                path = os.sep.join(items[0:path_items_len])
+                if len(items) > path_items_lens[i]:
+                    path = os.sep.join(items[0 : path_items_lens[i]])
 
-                if path not in charts:
-                    charts[name] = path
+                    if path not in charts:
+                        charts[name] = path
 
     # Change directory to the chart and run tests
     for name, path in charts.items():
