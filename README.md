@@ -56,7 +56,7 @@ verbose: true
 ```
 
 The full list of options for the
-[plugin](https://github.com/yannh/kubeconform/blob/master/scripts/plugin_wrapper.py)
+[plugin](https://github.com/jtyr/kubeconform-helm/blob/master/scripts/plugin_wrapper.py)
 is as follows:
 
 ```text
@@ -133,8 +133,8 @@ The `kubeconform` [`pre-commit` hook](https://pre-commit.com) can be added into 
 
 ```yaml
 repos:
-  - repo: https://github.com/yannh/kubeconform
-    rev: v0.5.0
+  - repo: https://github.com/jtyr/kubeconform-helm
+    rev: v0.1.15
     hooks:
       - id: kubeconform-helm
 ```
@@ -144,8 +144,8 @@ The hook uses `helm template` internally and passes its output to the
 by the hook that can be specified:
 
 ```yaml
-  - repo: https://github.com/yannh/kubeconform
-    rev: v0.5.0
+  - repo: https://github.com/jtyr/kubeconform-helm
+    rev: v0.1.15
     hooks:
       - id: kubeconform-helm
         args:
@@ -157,8 +157,8 @@ There is also several `kubeconform` command line options supported by the hook
 that can be specified:
 
 ```yaml
-  - repo: https://github.com/yannh/kubeconform
-    rev: v0.5.0
+  - repo: https://github.com/jtyr/kubeconform-helm
+    rev: v0.1.15
     hooks:
       - id: kubeconform-helm
         args:
@@ -168,7 +168,7 @@ that can be specified:
 ```
 
 The full list of options for the
-[hook](https://github.com/yannh/kubeconform/blob/master/scripts/pre-commit.py)
+[hook](https://github.com/jtyr/kubeconform-helm/blob/master/scripts/pre-commit.py)
 is as follows:
 
 ```text
@@ -192,7 +192,8 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --charts-path PATH    path to the directory with charts (default: charts)
+  --charts-path PATH    path to the directory with charts, can be multiple (default:
+                        charts)
   --include-charts LIST
                         comma-separated list of chart names to include in the testing
   --exclude-charts LIST

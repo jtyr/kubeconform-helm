@@ -38,8 +38,9 @@ def parse_args(
         parser.add_argument(
             "--charts-path",
             metavar="PATH",
-            help="path to the directory with charts (default: charts)",
-            default="charts",
+            action="append",
+            help="path to the directory with charts, can be multiple (default: charts)",
+            default=["charts"],
         )
 
     if add_incl_excl:
