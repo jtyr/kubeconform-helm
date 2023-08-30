@@ -141,6 +141,13 @@ def parse_args(
     )
 
     group_helm_tmpl.add_argument(
+        "-v",
+        "--kube-version",
+        metavar="VERSION",
+        help="Kubernetes version to generate for",
+    )
+
+    group_helm_tmpl.add_argument(
         "-f",
         "--values",
         metavar="FILE",
@@ -250,6 +257,9 @@ def parse_args(
         args["helm_build"] += [a.CHART]
 
     # ### Populate the helm template options
+    if a.kube_version is not None:
+        args["helm_tmpl"] += ["--kube-version", a.kube_version]
+
     if a.values:
         for v in a.values:
             args["helm_tmpl"] += ["--values", v]
