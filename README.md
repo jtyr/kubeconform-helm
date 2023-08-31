@@ -134,7 +134,7 @@ The `kubeconform` [`pre-commit` hook](https://pre-commit.com) can be added into 
 ```yaml
 repos:
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.1.15
+    rev: v0.1.16
     hooks:
       - id: kubeconform-helm
 ```
@@ -145,7 +145,7 @@ by the hook that can be specified:
 
 ```yaml
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.1.15
+    rev: v0.1.16
     hooks:
       - id: kubeconform-helm
         args:
@@ -158,7 +158,7 @@ that can be specified:
 
 ```yaml
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.1.15
+    rev: v0.1.16
     hooks:
       - id: kubeconform-helm
         args:
