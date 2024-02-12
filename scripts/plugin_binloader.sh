@@ -103,10 +103,18 @@ getDownloadURLs() {
   echo "Retrieving $latest_url"
 
   if [ $DOWNLOADER = 'curl' ]; then
-    DOWNLOAD_URL=$(curl -sL "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+    if [ -z "${GITHUB_TOKEN}" ]; then
+      DOWNLOAD_URL=$(curl -sL "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+    else
+      DOWNLOAD_URL=$(curl -sL "$latest_url" --header "Authorization: Bearer ${GITHUB_TOKEN}" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+    fi
     PROJECT_CHECKSUM=$(curl -sL "$latest_url" | grep "$PROJECT_CHECKSUM_FILE" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
   elif [ $DOWNLOADER = 'wget' ]; then
-    DOWNLOAD_URL=$(wget -q -O - "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+    if [ -z "${GITHUB_TOKEN}" ]; then
+      DOWNLOAD_URL=$(wget -q -O - "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+     else
+      DOWNLOAD_URL=$(wget -q --header="Authorization: Bearer ${GITHUB_TOKEN}" -O - "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+    fi
     PROJECT_CHECKSUM=$(wget -q -O - "$latest_url" | grep "$PROJECT_CHECKSUM_FILE" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
   fi
 
