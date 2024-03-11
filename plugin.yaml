@@ -1,5 +1,5 @@
 name: kubeconform
-version: 0.1.16
+version: 0.1.17
 usage: Kubernetes manifest validation tool for Helm charts
 description: Kubernetes manifest validation tool for Helm charts
 ignoreFlags: false

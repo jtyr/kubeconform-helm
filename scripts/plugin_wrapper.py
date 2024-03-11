@@ -303,8 +303,8 @@ def parse_args(
         for v in a.schema_location:
             args["kubeconform"] += ["-schema-location", v]
 
-    if a.skip is True:
-        args["kubeconform"] += ["-skip"]
+    if a.skip is not None:
+        args["kubeconform"] += ["-skip", a.skip]
 
     if a.strict is True:
         args["kubeconform"] += ["-strict"]
