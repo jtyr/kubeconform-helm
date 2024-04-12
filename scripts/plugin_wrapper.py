@@ -165,7 +165,7 @@ def parse_args(
         help="chart version",
     )
     group_helm_tmpl.add_argument(
-        "-c",
+        "-r",
         "--release",
         metavar="NAME",
         help="release name",
