@@ -161,7 +161,11 @@ def parse_args(
         help="namespace",
     )
     group_helm_tmpl.add_argument(
-        "-r",
+        "--chart-version",
+        help="chart version",
+    )
+    group_helm_tmpl.add_argument(
+        "-c",
         "--release",
         metavar="NAME",
         help="release name",
@@ -269,6 +273,9 @@ def parse_args(
 
     if a.namespace is not None:
         args["helm_tmpl"] += ["--namespace", a.namespace]
+
+    if a.chart_version is not None:
+        args["helm_tmpl"] += ["--version", a.chart_version]
 
     if a.release is not None:
         args["helm_tmpl"] += [a.release]
