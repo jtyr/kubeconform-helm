@@ -61,14 +61,15 @@ is as follows:
 
 ```text
 $ ./scripts/plugin_wrapper.py --help
-usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE]
-                         [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
-                         [--errors-only] [--fail-fast] [--skip-refresh] [--verify]
-                         [-f FILE] [-n NAME] [-r NAME] [--ignore-missing-schemas]
-                         [--insecure-skip-tls-verify] [--kubernetes-version VERSION]
-                         [--goroutines NUMBER] [--output {json,junit,tap,text}]
-                         [--reject LIST] [--schema-location LOCATION] [--skip LIST]
-                         [--strict] [--summary] [--verbose]
+usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE] [--values-dir DIR]
+                         [--values-pattern PATTERN] [-d] [--stdout] [--errors-only]
+                         [--fail-fast] [--skip-refresh] [--verify] [-v VERSION] [-f FILE]
+                         [-n NAME] [--chart-version CHART_VERSION] [-r NAME]
+                         [--ignore-missing-schemas] [--insecure-skip-tls-verify]
+                         [--kubernetes-version VERSION] [--goroutines NUMBER]
+                         [--output {json,junit,tap,text}] [--reject LIST]
+                         [--schema-location LOCATION] [--skip LIST] [--strict] [--summary]
+                         [--verbose]
                          CHART
 
 Wrapper to run kubeconform for a Helm chart.
@@ -96,10 +97,15 @@ helm build:
 helm template:
   Options passed to the 'helm template' command
 
+  -v VERSION, --kube-version VERSION
+                        Kubernetes version to generate for (default: same as --kubernetes-
+                        version)
   -f FILE, --values FILE
                         values YAML file or URL (can specified multiple)
   -n NAME, --namespace NAME
                         namespace
+  --chart-version CHART_VERSION
+                        chart version
   -r NAME, --release NAME
                         release name
   CHART                 chart path (e.g. '.')
