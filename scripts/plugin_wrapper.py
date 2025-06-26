@@ -195,7 +195,7 @@ def parse_args(
     group_kubeconform.add_argument(
         "--kubernetes-version",
         metavar="VERSION",
-        help="version of Kubernetes to validate against, e.g. 1.18.0 (default: master)",
+        help="version of Kubernetes to validate against, e.g. 1.33.0 (default: master)",
     )
     group_kubeconform.add_argument(
         "--goroutines",

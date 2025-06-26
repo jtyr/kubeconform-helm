@@ -88,22 +88,25 @@ def main():
 
     # Change directory to the chart and run tests
     for name, path in charts.items():
-        print("Testing chart '%s'" % name)
+        print("### Testing chart '%s'" % name)
+
+        # Make a copy of args only for this Helm chart
+        new_args = args.copy()
 
         with cd(path):
             # Parse config file
             config_args = pw.parse_config(
-                args["wrapper"].config,
+                new_args["wrapper"].config,
             )
 
             # Merge the args from config file and from command line
             if config_args:
-                args["kubeconform"] = config_args + args["kubeconform"]
+                new_args["kubeconform"] = config_args + new_args["kubeconform"]
 
             # Get list of values files
             values_files = pw.get_values_files(
-                args["wrapper"].values_dir,
-                args["wrapper"].values_pattern,
+                new_args["wrapper"].values_dir,
+                new_args["wrapper"].values_pattern,
             )
 
             # Run tests
@@ -112,11 +115,11 @@ def main():
                     for values_file in values_files:
                         log.debug("Testing with an extra values file %s" % values_file)
 
-                        pw.run_test(args, values_file)
+                        pw.run_test(new_args, values_file)
                 else:
                     log.debug("Testing without any extra values files")
 
-                    pw.run_test(args)
+                    pw.run_test(new_args)
             except Exception as e:
                 log.error("Testing failed: %s" % e)
 
