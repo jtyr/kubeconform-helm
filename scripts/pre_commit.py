@@ -6,7 +6,7 @@ import sys
 
 from contextlib import contextmanager
 
-import plugin_wrapper as pw
+from . import plugin_wrapper as pw
 
 
 @contextmanager

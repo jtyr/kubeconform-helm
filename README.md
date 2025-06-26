@@ -174,12 +174,12 @@ that can be specified:
 ```
 
 The full list of options for the
-[hook](https://github.com/jtyr/kubeconform-helm/blob/master/scripts/pre-commit.py)
+[hook](https://github.com/jtyr/kubeconform-helm/blob/master/scripts/pre_commit.py)
 is as follows:
 
 ```text
-$ ./scripts/pre-commit.py --help
-usage: pre-commit.py [-h] [--charts-path PATH] [--include-charts LIST]
+$ ./scripts/pre_commit.py --help
+usage: pre_commit.py [-h] [--charts-path PATH] [--include-charts LIST]
                      [--exclude-charts LIST] [--path-sub-pattern PATTERN]
                      [--path-sub-separator SEP] [--cache] [--cache-dir DIR] [--config FILE]
                      [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
