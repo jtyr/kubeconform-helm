@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -31,7 +31,7 @@ jobs:
           echo "plugin_version=$(grep -Po '(?<=version:\ ).*' plugin.yaml)" >> $GITHUB_OUTPUT
 
       - name: Compare versions
-        uses: madhead/semver-utils@1.0.0
+        uses: madhead/semver-utils@v4.3.0
         id: version
         with:
           version: ${{ steps.get.outputs.last_tag }}

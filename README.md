@@ -118,7 +118,7 @@ kubeconform:
   --insecure-skip-tls-verify
                         disable verification of the server's SSL certificate
   --kubernetes-version VERSION
-                        version of Kubernetes to validate against, e.g. 1.18.0 (default:
+                        version of Kubernetes to validate against, e.g. 1.33.0 (default:
                         master)
   --goroutines NUMBER   number of goroutines to run concurrently (default: 4)
   --output {json,junit,tap,text}
@@ -140,7 +140,7 @@ The `kubeconform` [`pre-commit` hook](https://pre-commit.com) can be added into 
 ```yaml
 repos:
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.1.17
+    rev: v0.2.0
     hooks:
       - id: kubeconform-helm
 ```
@@ -151,7 +151,7 @@ by the hook that can be specified:
 
 ```yaml
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.1.17
+    rev: v0.2.0
     hooks:
       - id: kubeconform-helm
         args:
@@ -164,22 +164,22 @@ that can be specified:
 
 ```yaml
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.1.17
+    rev: v0.2.0
     hooks:
       - id: kubeconform-helm
         args:
-          - --kubernetes-version=1.24.0
+          - --kubernetes-version=1.33.0
           - --verbose
           - --summary
 ```
 
 The full list of options for the
-[hook](https://github.com/jtyr/kubeconform-helm/blob/master/scripts/pre-commit.py)
+[hook](https://github.com/jtyr/kubeconform-helm/blob/master/scripts/pre_commit.py)
 is as follows:
 
 ```text
-$ ./scripts/pre-commit.py --help
-usage: pre-commit.py [-h] [--charts-path PATH] [--include-charts LIST]
+$ ./scripts/pre_commit.py --help
+usage: pre_commit.py [-h] [--charts-path PATH] [--include-charts LIST]
                      [--exclude-charts LIST] [--path-sub-pattern PATTERN]
                      [--path-sub-separator SEP] [--cache] [--cache-dir DIR] [--config FILE]
                      [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
@@ -245,7 +245,7 @@ kubeconform:
   --insecure-skip-tls-verify
                         disable verification of the server's SSL certificate
   --kubernetes-version VERSION
-                        version of Kubernetes to validate against, e.g. 1.18.0 (default:
+                        version of Kubernetes to validate against, e.g. 1.33.0 (default:
                         master)
   --goroutines NUMBER   number of goroutines to run concurrently (default: 4)
   --output {json,junit,tap,text}
@@ -266,8 +266,9 @@ changes. Make sure you install it before contributing to the repo.
 
 ### Installation
 
-Following are the installation instructions for `pre-commit`. Further details
-can be found [here](https://pre-commit.com/#installation).
+Following are the installation instructions for `pre-commit`. Further
+details can be found in the [official
+documentation](https://pre-commit.com/#installation).
 
 #### Mac
 
