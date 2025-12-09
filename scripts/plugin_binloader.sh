@@ -100,15 +100,23 @@ getDownloadURLs() {
   # Use the GitHub API to find the latest version for this project.
   latest_url="https://api.github.com/repos/$PROJECT_GH/releases/latest"
 
-  echo "Retrieving $latest_url"
-
-  if [ $DOWNLOADER = 'curl' ]; then
-    DOWNLOAD_URL=$(curl -sL "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
-    PROJECT_CHECKSUM=$(curl -sL "$latest_url" | grep "$PROJECT_CHECKSUM_FILE" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
-  elif [ $DOWNLOADER = 'wget' ]; then
-    DOWNLOAD_URL=$(wget -q -O - "$latest_url" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
-    PROJECT_CHECKSUM=$(wget -q -O - "$latest_url" | grep "$PROJECT_CHECKSUM_FILE" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}' 2>/dev/null)
+  # Mitigate API Rate Limiting
+  if [ -n "${GITHUB_TOKEN}" ]; then
+    auth_header="Authorization: Bearer ${GITHUB_TOKEN}"
   fi
+
+  echo "Retrieving $latest_url ${auth_header:+"with token"}"
+
+  if [ "$DOWNLOADER" = 'curl' ]; then
+    response=$(curl -sL ${auth_header:+"-H$auth_header"} "$latest_url")
+  elif [ "$DOWNLOADER" = 'wget' ]; then
+    response=$(wget -q ${auth_header:+"--header=$auth_header"} -O - "$latest_url" || true)
+  fi
+  unset auth_header
+
+  DOWNLOAD_URL=$(echo "$response" | grep "$OS-$ARCH" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}')
+  PROJECT_CHECKSUM=$(echo "$response" | grep "$PROJECT_CHECKSUM_FILE" | awk '/"browser_download_url":/{gsub(/[,"]/,"", $2); print $2}')
+  unset response
 
   if [ -z "$DOWNLOAD_URL" ]; then
     echo 'Failed to get DOWNLOAD_URL'
