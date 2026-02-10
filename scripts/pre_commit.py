@@ -60,6 +60,20 @@ def main():
 
     for i, charts_path in enumerate(args["wrapper"].charts_path):
         for f in args["wrapper"].FILES:
+            # Support chart in repo root when charts_path is "." or ""
+            if charts_path in (".", ""):
+                if not f.startswith(".."):
+                    path = "."
+                    name = "chart"
+                    if (
+                        include_charts and name not in include_charts
+                    ) or name in exclude_charts:
+                        continue
+                    if path not in charts:
+                        charts[name] = path
+                    continue
+                continue
+
             if f.startswith("%s%s" % (charts_path, os.sep)):
                 # Path substitution if any is defined
                 if (
