@@ -125,6 +125,11 @@ def parse_args(
     )
 
     group_helm_build.add_argument(
+        "--skip-dep-build",
+        help="skip helm dependency build/update",
+        action="store_true",
+    )
+    group_helm_build.add_argument(
         "--skip-refresh",
         help="do not refresh the local repository cache",
         action="store_true",
@@ -563,12 +568,13 @@ def run_test(args, values_file=None):
         ]
 
     # Build Helm dependencies
-    try:
-        run_helm_dependecy_build(
-            args["helm_build"],
-        )
-    except Exception as e:
-        raise Exception("dependency build failed: %s" % e)
+    if not args["wrapper"].skip_dep_build:
+        try:
+            run_helm_dependecy_build(
+                args["helm_build"],
+            )
+        except Exception as e:
+            raise Exception("dependency build failed: %s" % e)
 
     # Get templated output
     try:
