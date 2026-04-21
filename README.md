@@ -62,8 +62,8 @@ is as follows:
 ```text
 $ ./scripts/plugin_wrapper.py --help
 usage: plugin_wrapper.py [-h] [--cache] [--cache-dir DIR] [--config FILE] [--values-dir DIR]
-                         [--values-pattern PATTERN] [-d] [--stdout] [--errors-only]
-                         [--fail-fast] [--skip-refresh] [--verify] [-v VERSION] [-f FILE]
+                         [--values-pattern PATTERN] [-d] [--stdout] [--errors-only] [--fail-fast]
+                         [--skip-refresh] [--verify] [--force-dep-update] [-v VERSION] [-f FILE]
                          [-n NAME] [--chart-version CHART_VERSION] [-r NAME]
                          [--ignore-missing-schemas] [--insecure-skip-tls-verify]
                          [--kubernetes-version VERSION] [--goroutines NUMBER]
@@ -88,26 +88,23 @@ options:
   --errors-only         output only errors
   --fail-fast           fail on first error
 
-helm build:
-  Options passed to the 'helm build' command
+helm dependency update:
+  Options passed to the 'helm dependency update' command
 
   --skip-refresh        do not refresh the local repository cache
   --verify              verify the packages against signatures
+  --force-dep-update    force dependency update even if Chart.lock already exists
 
 helm template:
   Options passed to the 'helm template' command
 
-  -v VERSION, --kube-version VERSION
-                        Kubernetes version to generate for (default: same as --kubernetes-
-                        version)
-  -f FILE, --values FILE
-                        values YAML file or URL (can specified multiple)
-  -n NAME, --namespace NAME
-                        namespace
+  -v, --kube-version VERSION
+                        Kubernetes version to generate for (default: same as --kubernetes-version)
+  -f, --values FILE     values YAML file or URL (can specified multiple)
+  -n, --namespace NAME  namespace
   --chart-version CHART_VERSION
                         chart version
-  -r NAME, --release NAME
-                        release name
+  -r, --release NAME    release name
   CHART                 chart path (e.g. '.')
 
 kubeconform:
@@ -118,8 +115,7 @@ kubeconform:
   --insecure-skip-tls-verify
                         disable verification of the server's SSL certificate
   --kubernetes-version VERSION
-                        version of Kubernetes to validate against, e.g. 1.33.0 (default:
-                        master)
+                        version of Kubernetes to validate against, e.g. 1.33.0 (default: master)
   --goroutines NUMBER   number of goroutines to run concurrently (default: 4)
   --output {json,junit,tap,text}
                         output format (default: text)
@@ -140,7 +136,7 @@ The `kubeconform` [`pre-commit` hook](https://pre-commit.com) can be added into 
 ```yaml
 repos:
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.2.0
+    rev: v0.3.0
     hooks:
       - id: kubeconform-helm
 ```
@@ -151,7 +147,7 @@ by the hook that can be specified:
 
 ```yaml
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.2.0
+    rev: v0.3.0
     hooks:
       - id: kubeconform-helm
         args:
@@ -164,7 +160,7 @@ that can be specified:
 
 ```yaml
   - repo: https://github.com/jtyr/kubeconform-helm
-    rev: v0.2.0
+    rev: v0.3.0
     hooks:
       - id: kubeconform-helm
         args:
@@ -179,14 +175,15 @@ is as follows:
 
 ```text
 $ ./scripts/pre_commit.py --help
-usage: pre_commit.py [-h] [--charts-path PATH] [--include-charts LIST]
-                     [--exclude-charts LIST] [--path-sub-pattern PATTERN]
-                     [--path-sub-separator SEP] [--cache] [--cache-dir DIR] [--config FILE]
-                     [--values-dir DIR] [--values-pattern PATTERN] [-d] [--stdout]
-                     [--errors-only] [--fail-fast] [--skip-refresh] [--verify] [-f FILE]
-                     [-n NAME] [-r NAME] [--ignore-missing-schemas]
-                     [--insecure-skip-tls-verify] [--kubernetes-version VERSION]
-                     [--goroutines NUMBER] [--output {json,junit,tap,text}] [--reject LIST]
+usage: pre_commit.py [-h] [--charts-path PATH] [--include-charts LIST] [--exclude-charts LIST]
+                     [--path-sub-pattern PATTERN] [--path-sub-separator SEP] [--cache]
+                     [--cache-dir DIR] [--config FILE] [--values-dir DIR]
+                     [--values-pattern PATTERN] [-d] [--stdout] [--errors-only] [--fail-fast]
+                     [--skip-refresh] [--verify] [--force-dep-update] [-v VERSION] [-f FILE]
+                     [-n NAME] [--chart-version CHART_VERSION] [-r NAME]
+                     [--ignore-missing-schemas] [--insecure-skip-tls-verify]
+                     [--kubernetes-version VERSION] [--goroutines NUMBER]
+                     [--output {json,junit,tap,text}] [--reject LIST]
                      [--schema-location LOCATION] [--skip LIST] [--strict] [--summary]
                      [--verbose]
                      FILES [FILES ...]
@@ -198,15 +195,14 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --charts-path PATH    path to the directory with charts, can be multiple (default:
-                        charts)
+  --charts-path PATH    path to the directory with charts, can be multiple (default: charts)
   --include-charts LIST
                         comma-separated list of chart names to include in the testing
   --exclude-charts LIST
                         comma-separated list of chart names to exclude from the testing
   --path-sub-pattern PATTERN
-                        substitution pattern to rewrite chart directory path for library
-                        charts (e.g. '^charts/(commonlib),helper-charts/\1-test')
+                        substitution pattern to rewrite chart directory path for library charts
+                        (e.g. '^charts/(commonlib),helper-charts/\1-test')
   --path-sub-separator SEP
                         separator used to split the path-sub-pattern (default: ,)
   --cache               whether to use kubeconform cache
@@ -221,21 +217,23 @@ options:
   --errors-only         output only errors
   --fail-fast           fail on first error
 
-helm build:
-  Options passed to the 'helm build' command
+helm dependency update:
+  Options passed to the 'helm dependency update' command
 
   --skip-refresh        do not refresh the local repository cache
   --verify              verify the packages against signatures
+  --force-dep-update    force dependency update even if Chart.lock already exists
 
 helm template:
   Options passed to the 'helm template' command
 
-  -f FILE, --values FILE
-                        values YAML file or URL (can specified multiple)
-  -n NAME, --namespace NAME
-                        namespace
-  -r NAME, --release NAME
-                        release name
+  -v, --kube-version VERSION
+                        Kubernetes version to generate for (default: same as --kubernetes-version)
+  -f, --values FILE     values YAML file or URL (can specified multiple)
+  -n, --namespace NAME  namespace
+  --chart-version CHART_VERSION
+                        chart version
+  -r, --release NAME    release name
 
 kubeconform:
   Options passsed to the 'kubeconform' command
@@ -245,8 +243,7 @@ kubeconform:
   --insecure-skip-tls-verify
                         disable verification of the server's SSL certificate
   --kubernetes-version VERSION
-                        version of Kubernetes to validate against, e.g. 1.33.0 (default:
-                        master)
+                        version of Kubernetes to validate against, e.g. 1.33.0 (default: master)
   --goroutines NUMBER   number of goroutines to run concurrently (default: 4)
   --output {json,junit,tap,text}
                         output format (default: text)

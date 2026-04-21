@@ -3,6 +3,7 @@
 import re
 import os
 import sys
+import yaml
 
 from contextlib import contextmanager
 
@@ -59,6 +60,37 @@ def main():
         exclude_charts = []
 
     for i, charts_path in enumerate(args["wrapper"].charts_path):
+        # If charts_path itself is a chart directory, treat it as a single chart
+        chart_yaml = os.path.join(charts_path, "Chart.yaml")
+
+        if os.path.isfile(chart_yaml):
+            try:
+                with open(chart_yaml, "r") as stream:
+                    chart_data = yaml.safe_load(stream) or {}
+            except (IOError, yaml.YAMLError):
+                chart_data = {}
+
+            name = chart_data.get("name") or os.path.basename(
+                os.path.abspath(charts_path)
+            )
+
+            # Skip chart if it's not included or is excluded
+            if (
+                include_charts and name not in include_charts
+            ) or name in exclude_charts:
+                continue
+
+            # Any changed file inside this path counts as a change to this chart
+            prefix = "" if charts_path == "." else charts_path + os.sep
+
+            for f in args["wrapper"].FILES:
+                if prefix == "" or f.startswith(prefix) or f == charts_path:
+                    charts[name] = charts_path
+
+                    break
+
+            continue
+
         for f in args["wrapper"].FILES:
             if f.startswith("%s%s" % (charts_path, os.sep)):
                 # Path substitution if any is defined
