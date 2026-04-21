@@ -9,6 +9,20 @@ hook](https://pre-commit.com/).
 
 ### Helm plugin
 
+#### Requirements
+
+The Helm plugin is implemented as a Python wrapper and requires the following to
+be available on the system:
+
+- Python 3
+- [PyYAML](https://pypi.org/project/PyYAML/) (`pip install pyyaml`, or
+  `python3-yaml` / `python-yaml` via the system package manager)
+
+Without PyYAML, the plugin fails with `ModuleNotFoundError: No module named
+'yaml'` on first run.
+
+#### Installation
+
 The `kubeconform` [Helm plugin](https://helm.sh/docs/topics/plugins/) can be
 installed using this command:
 
