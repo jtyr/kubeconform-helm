@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
@@ -10,7 +10,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.45.0
+    rev: v0.48.0
     hooks:
       - id: markdownlint
         name: Markdownlint
@@ -22,7 +22,7 @@ repos:
         name: Shellcheck
 
   - repo: https://github.com/psf/black
-    rev: 25.1.0
+    rev: 26.3.1
     hooks:
       - id: black
         name: Python black code formatter
@@ -33,6 +33,3 @@ repos:
     hooks:
       - id: flake8
         name: Python flake8
-        args:
-          - --max-line-length=88
-          - --ignore=E501,W503

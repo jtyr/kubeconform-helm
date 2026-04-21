@@ -9,7 +9,6 @@ import yaml
 
 from glob import glob
 
-
 # Name of the Helm plugin
 PLUGIN_NAME = "kubeconform-helm"
 
@@ -119,19 +118,24 @@ def parse_args(
         action="store_true",
     )
 
-    group_helm_build = parser.add_argument_group(
-        "helm build",
-        "Options passed to the 'helm build' command",
+    group_helm_dep_update = parser.add_argument_group(
+        "helm dependency update",
+        "Options passed to the 'helm dependency update' command",
     )
 
-    group_helm_build.add_argument(
+    group_helm_dep_update.add_argument(
         "--skip-refresh",
         help="do not refresh the local repository cache",
         action="store_true",
     )
-    group_helm_build.add_argument(
+    group_helm_dep_update.add_argument(
         "--verify",
         help="verify the packages against signatures",
+        action="store_true",
+    )
+    group_helm_dep_update.add_argument(
+        "--force-dep-update",
+        help="force dependency update even if Chart.lock already exists",
         action="store_true",
     )
 
@@ -394,9 +398,13 @@ def get_values_files(values_dir, values_pattern, chart_dir=None):
     return values_files
 
 
-def run_helm_dependecy_build(args):
+def run_helm_dependecy_build(args, force=False):
     # Check if it's local chart
     if not os.path.isfile(os.path.join(args[-1], "Chart.yaml")):
+        return
+
+    # Skip if Chart.lock already exists (unless forced)
+    if not force and os.path.isfile(os.path.join(args[-1], "Chart.lock")):
         return
 
     charts_dir = os.path.join(args[-1], "charts")
@@ -432,18 +440,14 @@ def run_helm_dependecy_build(args):
                     # All dependencies seem to be there so don't run anything
                     return
 
-    # Check if there is Chart.lock
-    if os.path.isfile(os.path.join(args[-1], "Chart.yaml")):
-        action = "update"
-    else:
-        action = "build"
-
+    # 'update' also works as 'build' when Chart.lock is missing
+    # (it creates Chart.lock and downloads the dependencies)
     # Run process
     result = subprocess.run(
         [
             os.getenv("HELM_BIN", "helm"),
             "dependency",
-            action,
+            "update",
         ]
         + args,
         stdout=subprocess.PIPE,
@@ -454,7 +458,7 @@ def run_helm_dependecy_build(args):
     # Check for errors
     if result.returncode != 0:
         raise Exception(
-            "failed to run helm dependency build: rc=%d %s"
+            "failed to run helm dependency update: rc=%d %s"
             % (result.returncode, result.stderr)
         )
 
@@ -566,9 +570,10 @@ def run_test(args, values_file=None):
     try:
         run_helm_dependecy_build(
             args["helm_build"],
+            force=args["wrapper"].force_dep_update,
         )
     except Exception as e:
-        raise Exception("dependency build failed: %s" % e)
+        raise Exception("dependency update failed: %s" % e)
 
     # Get templated output
     try:

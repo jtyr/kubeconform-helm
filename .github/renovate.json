@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "helpers:pinGitHubActionDigests"
+  ],
+  "dependencyDashboard": true,
+  "pre-commit": {
+    "enabled": true
+  },
+  "labels": [
+    "renovate"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "addLabels": [
+        "pre-commit"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "addLabels": [
+        "github-actions"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    }
+  ]
+}
